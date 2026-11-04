@@ -1,7 +1,7 @@
 {
   "id": "favorite-team",
   "name": "Favorite Team",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Follow one team: the next game (with logos, time, TV and venue), up to five upcoming games, and the last result. NFL, NBA, MLB, NHL, WNBA, MLS and college football and basketball.",
   "author": "Conductor-Tulip-Founder8",
   "license": "MIT",

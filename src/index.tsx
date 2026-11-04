@@ -132,52 +132,77 @@ function LastGameRow({ g, teamId, clock }: { g: Game; teamId: string; clock: Clo
 }
 
 function SportIcon({ sport, size }: { sport: string; size: string }) {
-  const common: any = { fill: 'none', stroke: 'currentColor', strokeWidth: 1.6, strokeLinecap: 'round', strokeLinejoin: 'round' };
   let body: any;
   switch (sport) {
     case 'basketball':
       body = (
-        <g {...common}>
-          <circle cx="12" cy="12" r="10" />
-          <path d="M12 2v20M2 12h20M5 4.6c3.4 3.3 3.4 11.5 0 14.8M19 4.6c-3.4 3.3-3.4 11.5 0 14.8" />
+        <g>
+          <circle cx="12" cy="12" r="10.5" fill="#e8772e" stroke="#4a2008" strokeWidth="1.1" />
+          <g fill="none" stroke="#4a2008" strokeWidth="1" strokeLinecap="round">
+            <path d="M12 1.5v21M1.5 12h21" />
+            <path d="M4.2 4.2c3.6 3.4 3.6 12.2 0 15.6M19.8 4.2c-3.6 3.4-3.6 12.2 0 15.6" />
+          </g>
         </g>
       );
       break;
     case 'baseball':
       body = (
-        <g {...common}>
-          <circle cx="12" cy="12" r="10" />
-          <path d="M5.5 5.5c2.5 3 2.5 10 0 13M18.5 5.5c-2.5 3-2.5 10 0 13M7.6 8.2l1.6.6M7.8 11.6l1.7.1M7.8 14.9l1.6-.5M16.4 8.2l-1.6.6M16.2 11.6l-1.7.1M16.2 14.9l-1.6-.5" />
+        <g>
+          <circle cx="12" cy="12" r="10.5" fill="#f6f3ea" stroke="#9b9588" strokeWidth="0.8" />
+          <g fill="none" stroke="#c8342b" strokeWidth="1.1" strokeLinecap="round">
+            <path d="M5.2 4.6c2.8 3.2 2.8 11.6 0 14.8M18.8 4.6c-2.8 3.2-2.8 11.6 0 14.8" />
+          </g>
+          <g stroke="#c8342b" strokeWidth="0.9" strokeLinecap="round">
+            <path d="M6.7 7.6l1.9.7M7.2 11.3l2 .1M7.1 15l1.9-.6M17.3 7.6l-1.9.7M16.8 11.3l-2 .1M16.9 15l-1.9-.6" />
+          </g>
         </g>
       );
       break;
     case 'hockey':
       body = (
-        <g {...common}>
-          <ellipse cx="12" cy="8.5" rx="8" ry="3.5" />
-          <path d="M4 8.5v6.5c0 1.9 3.6 3.5 8 3.5s8-1.6 8-3.5V8.5" />
+        <g>
+          <path d="M3 9v6.2c0 2.3 4 4.3 9 4.3s9-2 9-4.3V9z" fill="#1f2328" />
+          <ellipse cx="12" cy="9" rx="9" ry="4.3" fill="#3a4047" stroke="#0f1215" strokeWidth="0.8" />
+          <ellipse cx="12" cy="8.4" rx="6" ry="2.3" fill="none" stroke="#5a626b" strokeWidth="0.8" />
         </g>
       );
       break;
     case 'soccer':
       body = (
-        <g {...common}>
-          <circle cx="12" cy="12" r="10" />
-          <path d="M12 8.5l3.2 2.3-1.2 3.7h-4l-1.2-3.7zM12 8.5V2.3M15.2 10.8l5.6-1.8M14 14.5l3.5 4.7M10 14.5l-3.5 4.7M8.8 10.8L3.2 9" />
+        <g>
+          <circle cx="12" cy="12" r="10.5" fill="#fafafa" stroke="#2a2a2a" strokeWidth="1" />
+          <path d="M12 7.6l3.5 2.5-1.3 4.1H9.8L8.5 10.1z" fill="#1d1d1d" />
+          <g fill="none" stroke="#1d1d1d" strokeWidth="0.9" strokeLinecap="round">
+            <path d="M12 7.6V2M15.5 10.1l5.2-1.7M14.2 14.2l3.3 4.4M9.8 14.2l-3.3 4.4M8.5 10.1L3.3 8.4" />
+          </g>
         </g>
       );
       break;
     default:
-      // American football
+      // American football: brown ball, white tip stripes, white laces.
       body = (
-        <g {...common}>
-          <path d="M3.5 20.5C3.5 11.5 11.5 3.5 20.5 3.5c0 9-8 17-17 17z" />
-          <path d="M9 15l6-6M11.6 10.4l2 2M9.4 12.6l2 2M13.8 8.2l2 2" />
+        <g transform="rotate(-40 12 12)">
+          <defs>
+            <clipPath id="hs-fav-football">
+              <ellipse cx="12" cy="12" rx="12.8" ry="7.4" />
+            </clipPath>
+          </defs>
+          <ellipse cx="12" cy="12" rx="12.8" ry="7.4" fill="#8a4118" />
+          <g clipPath="url(#hs-fav-football)">
+            <ellipse cx="12" cy="8.6" rx="10" ry="2.8" fill="#a9582a" opacity="0.7" />
+            <g stroke="#fff" strokeWidth="1.1">
+              <path d="M3.4 3v18M5.4 3v18M20.6 3v18M18.6 3v18" />
+            </g>
+          </g>
+          <ellipse cx="12" cy="12" rx="12.8" ry="7.4" fill="none" stroke="#3d1a07" strokeWidth="1.1" />
+          <g stroke="#fff" strokeWidth="1.1" strokeLinecap="round">
+            <path d="M8.4 12h7.2M9.6 10v4M11.2 10v4M12.8 10v4M14.4 10v4" />
+          </g>
         </g>
       );
   }
   return (
-    <svg viewBox="0 0 24 24" width={size} height={size} style={{ flex: 'none', color: 'rgba(255,255,255,0.7)' }} role="img" aria-label={sport}>
+    <svg viewBox="0 0 24 24" width={size} height={size} style={{ flex: 'none' }} role="img" aria-label={sport}>
       {body}
     </svg>
   );
