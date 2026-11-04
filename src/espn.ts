@@ -1,4 +1,4 @@
-import { getLeague } from './leagues';
+import { getLeague, type League } from './leagues';
 
 export const PLUGIN_ID = 'favorite-team';
 const BASE = 'https://site.api.espn.com/apis/site/v2/sports';
@@ -118,7 +118,58 @@ export async function fetchTeamSchedule(
     }
   }
 
-  return buildSchedule(main?.team, events);
+  const games = parseGames(events);
+  await refreshLive(l, games);
+  return classify(main?.team, games);
+}
+
+/* ------------------------------------------------------------- live scores */
+
+async function getSummary(l: League, eventId: string): Promise<any> {
+  const path = `${l.sport}/${l.slug}/summary?event=${encodeURIComponent(eventId)}`;
+  try {
+    return await getJson(`${BASE}/${path}`, 15000);
+  } catch {
+    return getJson(`https://site.web.api.espn.com/apis/site/v2/sports/${path}`, 15000);
+  }
+}
+
+/**
+ * The schedule feed can lag during a game, so for any game that should be under way
+ * (or has just ended) ask for its live summary and overlay the score and clock.
+ */
+async function refreshLive(l: League, games: Game[]): Promise<void> {
+  const now = Date.now();
+  const candidates = games
+    .filter((g) => !g.completed && !g.postponed && g.date <= now + 5 * 60000 && g.date > now - 9 * 3600000)
+    .slice(-2);
+  for (const g of candidates) {
+    try {
+      applyLive(g, await getSummary(l, g.id));
+    } catch {
+      /* keep what the schedule said */
+    }
+  }
+}
+
+export function applyLive(g: Game, json: any): void {
+  const comp = json?.header?.competitions?.[0];
+  if (!comp) return;
+  const type = comp.status?.type;
+  if (type) {
+    g.state = type.state === 'in' || type.state === 'post' ? type.state : 'pre';
+    g.completed = !!type.completed;
+    g.statusText = String(type.shortDetail ?? type.detail ?? g.statusText);
+  }
+  for (const c of comp.competitors ?? []) {
+    const side = c.homeAway === 'home' ? g.home : c.homeAway === 'away' ? g.away : null;
+    if (!side) continue;
+    if (c.score != null) {
+      const v = typeof c.score === 'object' ? (c.score.displayValue ?? c.score.value) : c.score;
+      if (v !== '' && v != null) side.score = String(v);
+    }
+    if (typeof c.winner === 'boolean') side.winner = c.winner;
+  }
 }
 
 /* --------------------------------------------------------------- parsing */
@@ -198,7 +249,7 @@ export function parseGame(ev: any): Game | null {
   };
 }
 
-export function buildSchedule(team: any, events: any[]): TeamSchedule {
+export function parseGames(events: any[]): Game[] {
   const seen = new Set<string>();
   const games: Game[] = [];
   for (const ev of events) {
@@ -208,7 +259,14 @@ export function buildSchedule(team: any, events: any[]): TeamSchedule {
     games.push(g);
   }
   games.sort((a, b) => a.date - b.date);
+  return games;
+}
 
+export function buildSchedule(team: any, events: any[]): TeamSchedule {
+  return classify(team, parseGames(events));
+}
+
+export function classify(team: any, games: Game[]): TeamSchedule {
   const finished = games.filter((g) => g.completed);
   const upcoming = games.filter((g) => !g.completed);
 

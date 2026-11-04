@@ -5,8 +5,8 @@ Follow one team on your wall display. Pick a team from the NFL, NBA, MLB, NHL, W
 - the **next game** in a card with both team logos, date and time, TV network, venue and city
 - up to **five upcoming games** (the next game plus up to four more in a compact list)
 - the **last result**, always on the bottom row: W/L, score, opponent and date
-- the team's record and standing, and AP/coaches rankings for college teams
-- live score and clock while a game is in progress (the module refreshes every minute during a game)
+- the team's record and standing, AP/coaches rankings for college teams, and a sport icon (football, basketball, baseball, hockey, soccer) in the header so college teams are easy to tell apart
+- the **live score and game clock** while a game is in progress. The module refreshes every minute during a game and reads ESPN's live game summary, because the schedule feed can lag
 
 Data comes from ESPN's public, unofficial site API, fetched through the Home Screens plugin proxy. No API key is needed.
 
@@ -54,7 +54,7 @@ In the editor, open the **Developer** tab and paste `http://localhost:5555`. Dev
 ## Notes and limits
 
 - ESPN's endpoints are public but undocumented, so they can change without notice.
-- The proxy allows 60 requests a minute per plugin. Each refresh makes two or three requests (regular season, playoffs, and next season when nothing is left this season).
+- The proxy allows 60 requests a minute per plugin. Each refresh makes two or three requests (regular season, playoffs, and next season when nothing is left this season), plus one more per game in progress.
 - Logos load straight from ESPN's image servers in the display's browser.
 - Soccer support is MLS only.
 

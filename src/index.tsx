@@ -45,8 +45,8 @@ function TeamRow({ side, showRank, showScore }: { side: Side; showRank: boolean;
         <span style={{ color: DIM, fontSize: '0.8em', fontWeight: 600 }}>#{side.rank}</span>
       ) : null}
       <span style={{ fontSize: '1.45em', fontWeight: 700, lineHeight: 1.1, ...ellipsis }}>{side.abbr}</span>
-      {showScore && side.score != null ? (
-        <span style={{ marginLeft: 'auto', fontSize: '1.45em', fontWeight: 700 }}>{side.score}</span>
+      {showScore ? (
+        <span style={{ marginLeft: 'auto', fontSize: '1.45em', fontWeight: 700 }}>{side.score ?? '\u2013'}</span>
       ) : null}
     </div>
   );
@@ -54,7 +54,7 @@ function TeamRow({ side, showRank, showScore }: { side: Side; showRank: boolean;
 
 function NextGameCard({ g, cfg, clock }: { g: Game; cfg: any; clock: Clock }) {
   const live = g.state === 'in';
-  const headline = g.postponed ? 'Postponed' : live ? g.statusText : whenLabel(g, clock);
+  const headline = g.postponed ? 'Postponed' : live ? `\u25CF ${g.statusText}` : whenLabel(g, clock);
   return (
     <div
       style={{
@@ -131,6 +131,58 @@ function LastGameRow({ g, teamId, clock }: { g: Game; teamId: string; clock: Clo
   );
 }
 
+function SportIcon({ sport, size }: { sport: string; size: string }) {
+  const common: any = { fill: 'none', stroke: 'currentColor', strokeWidth: 1.6, strokeLinecap: 'round', strokeLinejoin: 'round' };
+  let body: any;
+  switch (sport) {
+    case 'basketball':
+      body = (
+        <g {...common}>
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 2v20M2 12h20M5 4.6c3.4 3.3 3.4 11.5 0 14.8M19 4.6c-3.4 3.3-3.4 11.5 0 14.8" />
+        </g>
+      );
+      break;
+    case 'baseball':
+      body = (
+        <g {...common}>
+          <circle cx="12" cy="12" r="10" />
+          <path d="M5.5 5.5c2.5 3 2.5 10 0 13M18.5 5.5c-2.5 3-2.5 10 0 13M7.6 8.2l1.6.6M7.8 11.6l1.7.1M7.8 14.9l1.6-.5M16.4 8.2l-1.6.6M16.2 11.6l-1.7.1M16.2 14.9l-1.6-.5" />
+        </g>
+      );
+      break;
+    case 'hockey':
+      body = (
+        <g {...common}>
+          <ellipse cx="12" cy="8.5" rx="8" ry="3.5" />
+          <path d="M4 8.5v6.5c0 1.9 3.6 3.5 8 3.5s8-1.6 8-3.5V8.5" />
+        </g>
+      );
+      break;
+    case 'soccer':
+      body = (
+        <g {...common}>
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 8.5l3.2 2.3-1.2 3.7h-4l-1.2-3.7zM12 8.5V2.3M15.2 10.8l5.6-1.8M14 14.5l3.5 4.7M10 14.5l-3.5 4.7M8.8 10.8L3.2 9" />
+        </g>
+      );
+      break;
+    default:
+      // American football
+      body = (
+        <g {...common}>
+          <path d="M3.5 20.5C3.5 11.5 11.5 3.5 20.5 3.5c0 9-8 17-17 17z" />
+          <path d="M9 15l6-6M11.6 10.4l2 2M9.4 12.6l2 2M13.8 8.2l2 2" />
+        </g>
+      );
+  }
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} style={{ flex: 'none', color: 'rgba(255,255,255,0.7)' }} role="img" aria-label={sport}>
+      {body}
+    </svg>
+  );
+}
+
 function Header({ s, cfg }: { s: TeamSchedule; cfg: any }) {
   const sub = [cfg.showRecord ? s.header.record : '', cfg.showRecord ? s.header.standing : '']
     .filter(Boolean)
@@ -141,6 +193,9 @@ function Header({ s, cfg }: { s: TeamSchedule; cfg: any }) {
       <div style={{ minWidth: 0 }}>
         <div style={{ fontSize: '1.6em', fontWeight: 700, lineHeight: 1.1, ...ellipsis }}>{s.header.name || cfg.teamName}</div>
         {sub ? <div style={{ fontSize: '0.8em', color: DIM, marginTop: '0.15em' }}>{sub}</div> : null}
+      </div>
+      <div style={{ marginLeft: 'auto', paddingLeft: '0.4em' }}>
+        <SportIcon sport={getLeague(cfg.league).sport} size="1.9em" />
       </div>
     </div>
   );
