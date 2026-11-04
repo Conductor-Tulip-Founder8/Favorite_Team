@@ -1,0 +1,33 @@
+{
+  "id": "favorite-team",
+  "name": "Favorite Team",
+  "version": "1.0.0",
+  "description": "Follow one team: the next game (with logos, time, TV and venue), up to five upcoming games, and the last result. NFL, NBA, MLB, NHL, WNBA, MLS and college football and basketball.",
+  "author": "Conductor-Tulip-Founder8",
+  "license": "MIT",
+  "minAppVersion": "1.0.0",
+  "moduleType": "favorite-team",
+  "category": "Sports",
+  "icon": "trophy",
+  "defaultConfig": {
+    "league": "ncaaf",
+    "teamId": "",
+    "teamName": "",
+    "gamesToShow": 3,
+    "showLast": true,
+    "showRecord": true,
+    "showRank": true,
+    "showNetwork": true,
+    "showVenue": true,
+    "showLocation": true,
+    "textSize": 16,
+    "refreshMinutes": 5
+  },
+  "defaultSize": { "w": 560, "h": 420 },
+  "permissions": ["network"],
+  "allowedDomains": ["site.api.espn.com"],
+  "exports": {
+    "component": "default",
+    "configSection": "ConfigSection"
+  }
+}

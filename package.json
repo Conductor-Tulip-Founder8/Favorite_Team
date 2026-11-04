@@ -1,0 +1,22 @@
+{
+  "name": "home-screens-plugin-favorite-team",
+  "version": "1.0.0",
+  "description": "Home Screens plugin: follow one team with next games, venue, TV and the last result.",
+  "private": true,
+  "license": "MIT",
+  "author": "Conductor-Tulip-Founder8",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Conductor-Tulip-Founder8/home-screens-plugin-favorite-team.git"
+  },
+  "scripts": {
+    "build": "esbuild src/index.tsx --bundle --format=iife --global-name=__HS_PLUGIN__ --jsx=transform --jsx-factory=React.createElement --jsx-fragment=React.Fragment --target=es2020 --minify --outfile=dist/bundle.js",
+    "dev": "npm run build -- --watch=forever & npx --yes http-server . -p 5555 --cors -c-1",
+    "typecheck": "tsc --noEmit",
+    "package": "npm run build && tar -czf plugin.tar.gz manifest.json dist"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "typescript": "^5.6.0"
+  }
+}
