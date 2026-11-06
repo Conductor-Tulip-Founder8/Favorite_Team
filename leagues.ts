@@ -63,3 +63,9 @@ export function addonsFor(leagueId: string): League[] {
   if (base.group !== 'Soccer' && base.group !== 'Rugby') return [];
   return LEAGUES.filter((l) => l.addon && l.group === base.group && l.id !== base.id);
 }
+
+/** Extra competitions are stored as a plain comma-separated string ("ucl,uel"); older builds stored an array. */
+export function parseExtras(value: unknown): string[] {
+  const raw = Array.isArray(value) ? value : typeof value === 'string' ? value.split(',') : [];
+  return raw.map((x) => String(x).trim()).filter(Boolean);
+}

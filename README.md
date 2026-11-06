@@ -64,6 +64,10 @@ In the editor, open the **Developer** tab and paste `http://localhost:5555`. Dev
 3. The **Release** workflow builds `plugin.tar.gz` (the manifest and `dist/`) and attaches it to a GitHub release. The job summary prints the SHA-256.
 4. To list it in the directory, open https://homescreens.dev/plugins/submit, paste this repository's URL and that SHA-256.
 
+## Troubleshooting
+
+The bottom of the module's settings panel shows `Favorite Team v<version> · <n> leagues`. If it does not match the version you installed, the editor is still running an older copy: use **Update** on the plugin's card (for URL installs it re-downloads from the stored URL, so point it at the new tarball), then reload the editor page. If the label is right and a league is still missing, open an issue with the label text and what the League dropdown shows.
+
 ## Notes and limits
 
 - ESPN's endpoints are public but undocumented, so they can change without notice.

@@ -1,4 +1,5 @@
-import { GROUPS, LEAGUES, addonsFor, getLeague } from './leagues';
+import { GROUPS, LEAGUES, addonsFor, getLeague, parseExtras } from './leagues';
+import pkg from '../package.json';
 import {
   fetchTeamSchedule,
   fetchTeams,
@@ -286,7 +287,7 @@ export default function FavoriteTeam({ config }: { config: any }) {
   const league = cfg.league;
   const teamId = String(cfg.teamId ?? '');
   const refreshMinutes = Math.max(1, Number(cfg.refreshMinutes) || 5);
-  const extraKey = (Array.isArray(cfg.extraLeagues) ? cfg.extraLeagues : []).join(',');
+  const extraKey = parseExtras(cfg.extraLeagues).join(',');
 
   const [sched, setSched] = useState(null as TeamSchedule | null);
   const [error, setError] = useState(undefined as string | undefined);
@@ -393,7 +394,7 @@ const DEFAULTS = {
   league: 'ncaaf',
   teamId: '',
   teamName: '',
-  extraLeagues: [] as string[],
+  extraLeagues: '',
   gamesToShow: 3,
   showLast: true,
   showRecord: true,
@@ -446,7 +447,7 @@ export function ConfigSection({ config, onChange }: { config: any; onChange: (u:
 
   const league = config.league ?? DEFAULTS.league;
   const addons = addonsFor(getLeague(league).id);
-  const extras: string[] = Array.isArray(config.extraLeagues) ? config.extraLeagues : [];
+  const extras: string[] = parseExtras(config.extraLeagues);
   const [teams, setTeams] = useState(null as TeamOption[] | null);
   const [error, setError] = useState('');
   const [query, setQuery] = useState('');
@@ -477,7 +478,7 @@ export function ConfigSection({ config, onChange }: { config: any; onChange: (u:
       <select
         className={`${INPUT_CLASS} mb-3`}
         value={getLeague(league).id}
-        onChange={(e: any) => onChange({ league: e.target.value, teamId: '', teamName: '', extraLeagues: [] })}
+        onChange={(e: any) => onChange({ league: e.target.value, teamId: '', teamName: '', ...(extras.length ? { extraLeagues: '' } : {}) })}
       >
         {GROUPS.map((g) => (
           <optgroup key={g} label={g}>
@@ -530,7 +531,7 @@ export function ConfigSection({ config, onChange }: { config: any; onChange: (u:
                 type="checkbox"
                 checked={extras.includes(l.id)}
                 onChange={(e: any) =>
-                  onChange({ extraLeagues: e.target.checked ? [...extras, l.id] : extras.filter((x: string) => x !== l.id) })
+                  onChange({ extraLeagues: (e.target.checked ? [...extras, l.id] : extras.filter((x: string) => x !== l.id)).join(',') })
                 }
               />
               {l.label}
@@ -548,6 +549,9 @@ export function ConfigSection({ config, onChange }: { config: any; onChange: (u:
       <Check label="Show city and state" field="showLocation" config={config} onChange={onChange} />
       <Range label="Text size" field="textSize" min={10} max={40} step={1} config={config} onChange={onChange} />
       <Range label="Refresh every (minutes)" field="refreshMinutes" min={1} max={60} step={1} config={config} onChange={onChange} />
+      <div className="text-[10px] text-neutral-500">
+        Favorite Team v{pkg.version} &middot; {LEAGUES.length} leagues
+      </div>
     </Wrap>
   );
 }
