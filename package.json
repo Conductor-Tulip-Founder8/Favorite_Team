@@ -1,6 +1,6 @@
 {
   "name": "home-screens-plugin-favorite-team",
-  "version": "1.1.1",
+  "version": "1.3.0",
   "description": "Home Screens plugin: follow one team with next games, venue, TV and the last result.",
   "private": true,
   "license": "MIT",

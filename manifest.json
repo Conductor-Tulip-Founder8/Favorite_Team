@@ -1,8 +1,8 @@
 {
   "id": "favorite-team",
   "name": "Favorite Team",
-  "version": "1.1.1",
-  "description": "Follow one team: the next game (with logos, time, TV and venue), up to five upcoming games, and the last result. NFL, NBA, MLB, NHL, WNBA, MLS and college football and basketball.",
+  "version": "1.3.0",
+  "description": "Follow one team: the next game (with logos, time, TV and venue), up to five upcoming games, and the last result. Pro and college football and basketball, MLB, NHL, PLL, major soccer leagues and rugby.",
   "author": "Conductor-Tulip-Founder8",
   "license": "MIT",
   "minAppVersion": "1.0.0",
@@ -21,7 +21,8 @@
     "showVenue": true,
     "showLocation": true,
     "textSize": 16,
-    "refreshMinutes": 5
+    "refreshMinutes": 5,
+    "extraLeagues": []
   },
   "defaultSize": {
     "w": 560,
